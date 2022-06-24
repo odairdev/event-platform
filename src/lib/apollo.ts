@@ -15,5 +15,8 @@ const defaultOptions: DefaultOptions = {
 export const client = new ApolloClient({
     uri: import.meta.env.VITE_CONTENT_API,
     cache: new InMemoryCache(),
+    headers: {
+        'Authorization': `Bearer ${import.meta.env.VITE_AUTH_TOKEN}`
+    },
     defaultOptions: defaultOptions,
 })
