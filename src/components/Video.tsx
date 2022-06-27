@@ -7,57 +7,29 @@ import {
 } from "phosphor-react";
 import { Player, Youtube, DefaultUi } from "@vime/react";
 
-import '@vime/core/themes/default.css'
-import { gql, useQuery } from "@apollo/client";
-
-const GET_LESSON_BY_SLUG = gql`
-  query GetLessonBySlug($slug: String) {
-  lesson(where: {slug: $slug}) {
-    title
-    videoId
-    description
-    teacher {
-      bio
-      avatarURL
-      name
-    }
-  }
-}
-`
+import "@vime/core/themes/default.css";
+import { useGetLessonBySlugQuery } from "../graphql/generated";
 
 interface VideoProps {
-  lessonSlug: string
-}
-
-interface QueryProps {
-  lesson: {
-    title: string;
-    videoId: string;
-    description: string;
-    teacher: {
-      bio: string;
-      avatarURL: string;
-      name: string;
-    }
-  }
+  lessonSlug: string;
 }
 
 export function Video({ lessonSlug }: VideoProps) {
-  const { data } = useQuery<QueryProps>(GET_LESSON_BY_SLUG, {
+  const { data } = useGetLessonBySlugQuery({
     variables: {
-      slug: lessonSlug
+      slug: lessonSlug,
     },
-    fetchPolicy: "no-cache"
-  })
+    fetchPolicy: "no-cache",
+  });
 
-  console.log(data)
+  console.log(data);
 
-  if(!data) {
+  if (!data || !data.lesson) {
     return (
       <div className="flex-1">
         <p>Carregando...</p>
       </div>
-    )
+    );
   }
 
   return (
@@ -65,7 +37,10 @@ export function Video({ lessonSlug }: VideoProps) {
       <div className="bg-black flex justify-center">
         <div className="h-full w-full max-w-[1100px] max-h-[60vh] aspect-video">
           <Player>
-            <Youtube videoId={data?.lesson.videoId} key={data?.lesson.videoId}/>
+            <Youtube
+              videoId={data?.lesson.videoId}
+              key={data?.lesson.videoId}
+            />
             <DefaultUi />
           </Player>
         </div>
@@ -74,29 +49,29 @@ export function Video({ lessonSlug }: VideoProps) {
       <div className="p-8 max-w-[1100px] mx-auto">
         <div className="flex items-start gap-16">
           <div className="flex-1">
-            <h1 className="text-2xl font-bold">
-              {data?.lesson.title}
-            </h1>
+            <h1 className="text-2xl font-bold">{data?.lesson.title}</h1>
             <p className="mt-4 text-gray-200 leading-relaxed">
               {data.lesson.description}
             </p>
 
-            <div className="flex items-center gap-4 mt-6">
-              <img
-                src={data.lesson.teacher.avatarURL}
-                alt="avatar"
-                className="rounded-full w-16 h-16 border-2 border-blue-500"
-              />
+            {data.lesson.teacher && (
+              <div className="flex items-center gap-4 mt-6">
+                <img
+                  src={data.lesson.teacher.avatarURL}
+                  alt="avatar"
+                  className="rounded-full w-16 h-16 border-2 border-blue-500"
+                />
 
-              <div className="leading-relaxed">
-                <strong className="font-bold text-2xl block">
-                  {data.lesson.teacher.name}
-                </strong>
-                <span className="text-sm text-gray-200 block">
-                {data.lesson.teacher.bio}
-                </span>
+                <div className="leading-relaxed">
+                  <strong className="font-bold text-2xl block">
+                    {data.lesson.teacher.name}
+                  </strong>
+                  <span className="text-sm text-gray-200 block">
+                    {data.lesson.teacher.bio}
+                  </span>
+                </div>
               </div>
-            </div>
+            )}
           </div>
 
           <div className="flex flex-col gap-4">
@@ -141,8 +116,8 @@ export function Video({ lessonSlug }: VideoProps) {
             href="#"
             className="bg-gray-700 rounded overflow-hidden flex items-stretch gap-6 hover:bg-gray-600 transition-colors"
           >
-            <div className="flex flex items-center p-6 bg-green-700">
-              <Image size={39}/>
+            <div className="flex items-center p-6 bg-green-700">
+              <Image size={39} />
             </div>
             <div className="leading-relaxed p-6">
               <strong className="font-bold text-2xl block">
