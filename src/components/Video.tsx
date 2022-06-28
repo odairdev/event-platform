@@ -122,7 +122,7 @@ export function Video({ lessonSlug }: VideoProps) {
             </div>
             <div className="leading-relaxed py-6">
               <strong className="font-bold text-lg xs:text-2xl block">
-                Material Complementar
+                Wallpapers exclusivos
               </strong>
               <span className="text-xs xs:text-sm text-gray-200 block mt-2">
                 Baixe wallpapers exclusivos do Ignite Lab e personalize a sua

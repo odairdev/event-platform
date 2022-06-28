@@ -8,7 +8,7 @@ export function Sidebar() {
   const { isBurgerOpen } = useBurger()
 
   return (
-    <aside className={`${isBurgerOpen ? 'block absolute top-0 right-0 w-screen h-full z-[999]' : 'hidden'} lg:block w-[348px] bg-gray-700 p-6 border-l border-gray-600`}>
+    <aside className={`${isBurgerOpen ? 'block absolute top-0 right-0 h-full z-[999]' : 'hidden'} w-screen lg:block lg:w-[348px] bg-gray-700 p-6 border-l border-gray-600`}>
       <span className="block font-bold text-2xl pb-6 mb-6 border-b border-gray-500">
         Cronograma de aulas
       </span>
