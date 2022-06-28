@@ -1,9 +1,15 @@
 /** @type {import('tailwindcss').Config} */
+const defaultTheme = require('tailwindcss/defaultTheme')
+
 module.exports = {
   content: [
     './src/**/*.tsx'
   ],
   theme: {
+    screens: {
+      xs: '400px',
+      ...defaultTheme.screens
+    },
     extend: {
       backgroundImage: {
         blur: 'url(/src/assets/blur.png)'
